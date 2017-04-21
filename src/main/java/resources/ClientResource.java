@@ -6,7 +6,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import views.FileView;
-import views.ParseView;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,13 +34,4 @@ public class ClientResource
         return new FileView();
     }
 
-    @GET
-    @Path("/parse")
-    @ApiOperation(value="Return ApiResponseData", response = Response.class, notes="some day this will do more, it believes in a growth mentality.")
-    @ApiResponses(value={
-            @ApiResponse(code=400, message="Invalid ID")
-    })
-    public ParseView parseData() {
-        return new ParseView();
-    }
 }

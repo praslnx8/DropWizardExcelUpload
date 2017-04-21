@@ -27,8 +27,8 @@ import java.util.*;
 /**
  * Created by Juan on 25/02/2015.
  */
-@Path("/v1/files")
-@Api(value = "/v1/files", description = "End point for customer related")
+@Path("/uploadOrders")
+@Api(value = "/uploadOrders", description = "End point for customer related")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.MULTIPART_FORM_DATA)
 public class FileResource
@@ -42,7 +42,7 @@ public class FileResource
             @ApiResponse(code=400, message="Invalid ID")
     })
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException
+    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail, @HeaderParam("X-DreamFactory-Session-Token") String sessionToken) throws IOException
     {
         String uploadedFileLocation = fileDetail.getFileName();
         LOGGER.info(uploadedFileLocation);
@@ -50,7 +50,9 @@ public class FileResource
         writeToFile(uploadedInputStream, uploadedFileLocation);
         String output = uploadedFileLocation;
 
-        return Response.ok(output).build();
+        Response response = readExcelFile(fileDetail.getFileName(), sessionToken);
+
+        return response;
     }
 
     // save uploaded file to new location
@@ -68,17 +70,12 @@ public class FileResource
 
     }
 
-    @POST
-    @Path("/parse")
-    @ApiOperation(value="Return ApiResponseData", response = Response.class, notes="some day this will do more, it believes in a growth mentality.")
-    @ApiResponses(value={
-            @ApiResponse(code=400, message="Invalid ID")
-    })
-    public Response readExcelFile(@FormParam("file_name") String fileName, @HeaderParam("X-DreamFactory-Session-Token") String sessionToken)
+    private Response readExcelFile(@FormParam("file_name") String fileName, @HeaderParam("X-DreamFactory-Session-Token") String sessionToken)
     {
         try {
 
-            FileInputStream excelFile = new FileInputStream(new File(fileName));
+            File file = new File(fileName);
+            FileInputStream excelFile = new FileInputStream(file);
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
 
@@ -160,6 +157,12 @@ public class FileResource
 
                 sendToApi(sessionToken, orderPojoList);
             }
+
+            if(file.exists())
+            {
+                file.delete();
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
