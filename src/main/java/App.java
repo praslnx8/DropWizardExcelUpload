@@ -1,4 +1,13 @@
 
+import com.wordnik.swagger.config.ConfigFactory;
+import com.wordnik.swagger.config.ScannerFactory;
+import com.wordnik.swagger.config.SwaggerConfig;
+import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
+import com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider;
+import com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON;
+import com.wordnik.swagger.jaxrs.listing.ResourceListingProvider;
+import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
+import com.wordnik.swagger.reader.ClassReaders;
 import core.ConsoleLog;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -39,8 +48,10 @@ public class App extends Application<AppConfiguration>
     @Override
     public void initialize(Bootstrap<AppConfiguration> bootstrap)
     {
+        bootstrap.addBundle(new AssetsBundle("/views"));
         bootstrap.addBundle(new AssetsBundle("/assets/css", "/css", null, "css"));
-        bootstrap.addBundle(new ViewBundle());
+        bootstrap.addBundle(new AssetsBundle("/assets", "/docs", "index.html"));
+        bootstrap.addBundle(new ViewBundle<AppConfiguration>());
 
         ConsoleLog.i(TAG, "started");
     }
@@ -49,10 +60,11 @@ public class App extends Application<AppConfiguration>
     {
         enableCORS(environment);
 
+        initSwagger(appConfiguration, environment);
+
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(FileResource.class);
         environment.jersey().register(ClientResource.class);
-
     }
 
     private void enableCORS(Environment environment)
@@ -67,4 +79,34 @@ public class App extends Application<AppConfiguration>
         filter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
     }
+
+    private void initSwagger(AppConfiguration configuration, Environment environment) {
+        // Swagger Resource
+        environment.jersey().register(new ApiListingResourceJSON());
+
+        // Swagger providers
+        environment.jersey().register(new ApiDeclarationProvider());
+        environment.jersey().register(new ResourceListingProvider());
+
+        // Swagger Scanner, which finds all the resources for @Api Annotations
+        ScannerFactory.setScanner(new DefaultJaxrsScanner());
+
+        // Add the reader, which scans the resources and extracts the resource information
+        ClassReaders.setReader(new DefaultJaxrsApiReader());
+
+        // required CORS support
+        FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        filter.setInitParameter("allowedOrigins", "*"); // allowed origins comma separated
+        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowedMethods", "GET,PUT,POST,DELETE,OPTIONS,HEAD");
+        filter.setInitParameter("preflightMaxAge", "5184000"); // 2 months
+        filter.setInitParameter("allowCredentials", "true");
+
+        // Set the swagger config options
+        SwaggerConfig config = ConfigFactory.config();
+        config.setApiVersion("1.0.1");
+        config.setBasePath(configuration.getSwaggerBasePath());
+    }
+
 }

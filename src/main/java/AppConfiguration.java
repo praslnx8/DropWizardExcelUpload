@@ -10,5 +10,10 @@ import javax.validation.constraints.NotNull;
  */
 public class AppConfiguration extends Configuration
 {
+    @Valid
+    @NotNull
+    @JsonProperty("swaggerBasePath")
+    private String swaggerBasePath;
 
+    public String getSwaggerBasePath(){ return swaggerBasePath; }
 }

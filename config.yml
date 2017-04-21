@@ -12,3 +12,5 @@ server:
 logging:
   level: INFO
 
+swaggerBasePath: /
+

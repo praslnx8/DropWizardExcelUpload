@@ -4,6 +4,10 @@ import apiRequest.ApiFetcher;
 import apiRequest.ApiRequestType;
 import apiRequest.ApiResult;
 import com.sun.org.apache.xpath.internal.operations.Or;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import core.ConsoleLog;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -24,6 +28,7 @@ import java.util.*;
  * Created by Juan on 25/02/2015.
  */
 @Path("/v1/files")
+@Api(value = "/v1/files", description = "End point for customer related")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.MULTIPART_FORM_DATA)
 public class FileResource
@@ -32,6 +37,10 @@ public class FileResource
     private static final String TAG = FileResource.class.getSimpleName();
 
     @POST
+    @ApiOperation(value="Return ApiResponseData", response = Response.class, notes="some day this will do more, it believes in a growth mentality.")
+    @ApiResponses(value={
+            @ApiResponse(code=400, message="Invalid ID")
+    })
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException
     {
@@ -61,7 +70,11 @@ public class FileResource
 
     @POST
     @Path("/parse")
-    public Response readExcelFile(@FormParam("file_name") String fileName, @FormParam("session_token") String sessionToken)
+    @ApiOperation(value="Return ApiResponseData", response = Response.class, notes="some day this will do more, it believes in a growth mentality.")
+    @ApiResponses(value={
+            @ApiResponse(code=400, message="Invalid ID")
+    })
+    public Response readExcelFile(@FormParam("file_name") String fileName, @HeaderParam("X-DreamFactory-Session-Token") String sessionToken)
     {
         try {
 
