@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>hello</title>
+</head>
+<body>
+hello
+
+<div class="container">
+    <row>
+        <div class = "three columns">
+            <h1>Loads</h1>
+            <ul>
+                {{#customerLoadVOList}}<li><a href="/load/{{userOne1}}/{{userTwo}}">{{userTwo}}</a></li>{{/customerLoadVOList}}
+            </ul>
+        </div>
+        <div class = "nine columns">
+            {{#currentChat}}
+                <h1>Chat between {{currentUser}} and {{otherUser}}</h1>
+                {{#chat}}
+                    {{.}}<br/>
+                {{/chat}}
+                <br>
+                <form method="post" action="/chat/{{currentUser}}/{{otherUser}}">
+                    <textarea name="message"></textarea>
+                    <br/><button>Submit</button>
+                </form>
+            {{/currentChat}}
+        </div>
+    </row>
+</div>
+</body>
+</html>
+

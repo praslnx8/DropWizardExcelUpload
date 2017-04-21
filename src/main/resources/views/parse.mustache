@@ -1,0 +1,16 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Upload File with Dropwizard</title>
+</head>
+<body>
+    <h1>Upload File with Dropwizard</h1>
+    <form action="/v1/files/parse" method="post" enctype="application/x-www-form-urlencoded">
+       <p>
+        Enter File Name: <input type="text" name="file_name" />
+        Enter Session Token: <input type="tel" name="session_token" />
+       </p>
+       <input type="submit" value="Upload" />
+    </form>
+</body>
+</html>
