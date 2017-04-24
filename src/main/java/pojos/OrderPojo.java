@@ -5,56 +5,48 @@ package pojos;
  */
 public class OrderPojo
 {
-    private int sourceId;
-    private int destinationId;
-    private int truckTypeId;
-    private int loadingPointId;
-    private int unloadingPointId;
+    private Integer itemId;
+    private Integer truckTypeId;
+    private Integer loadingPointId;
+    private Integer unloadingPointId;
     private String requiredBy;
-    private int transporterId;
+    private Integer transporterId;
     private String driver;
     private String truckNo;
-    private int price;
-    private int loadingCharge;
-    private int unloadingCharge;
+    private Integer price;
+    private Integer loadingCharge;
+    private Integer unloadingCharge;
+    private Integer statusTypeId;
 
-    public int getSourceId() {
-        return sourceId;
+    public Integer getItemId() {
+        return itemId;
     }
 
-    public void setSourceId(int sourceId) {
-        this.sourceId = sourceId;
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
     }
 
-    public int getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(int destinationId) {
-        this.destinationId = destinationId;
-    }
-
-    public int getTruckTypeId() {
+    public Integer getTruckTypeId() {
         return truckTypeId;
     }
 
-    public void setTruckTypeId(int truckTypeId) {
+    public void setTruckTypeId(Integer truckTypeId) {
         this.truckTypeId = truckTypeId;
     }
 
-    public int getLoadingPointId() {
+    public Integer getLoadingPointId() {
         return loadingPointId;
     }
 
-    public void setLoadingPointId(int loadingPointId) {
+    public void setLoadingPointId(Integer loadingPointId) {
         this.loadingPointId = loadingPointId;
     }
 
-    public int getUnloadingPointId() {
+    public Integer getUnloadingPointId() {
         return unloadingPointId;
     }
 
-    public void setUnloadingPointId(int unloadingPointId) {
+    public void setUnloadingPointId(Integer unloadingPointId) {
         this.unloadingPointId = unloadingPointId;
     }
 
@@ -66,11 +58,11 @@ public class OrderPojo
         this.requiredBy = requiredBy;
     }
 
-    public int getTransporterId() {
+    public Integer getTransporterId() {
         return transporterId;
     }
 
-    public void setTransporterId(int transporterId) {
+    public void setTransporterId(Integer transporterId) {
         this.transporterId = transporterId;
     }
 
@@ -90,45 +82,35 @@ public class OrderPojo
         this.truckNo = truckNo;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public int getLoadingCharge() {
+    public Integer getStatusTypeId() {
+        return statusTypeId;
+    }
+
+    public void setStatusTypeId(Integer statusTypeId) {
+        this.statusTypeId = statusTypeId;
+    }
+
+    public Integer getLoadingCharge() {
         return loadingCharge;
     }
 
-    public void setLoadingCharge(int loadingCharge) {
+    public void setLoadingCharge(Integer loadingCharge) {
         this.loadingCharge = loadingCharge;
     }
 
-    public int getUnloadingCharge() {
+    public Integer getUnloadingCharge() {
         return unloadingCharge;
     }
 
-    public void setUnloadingCharge(int unloadingCharge) {
+    public void setUnloadingCharge(Integer unloadingCharge) {
         this.unloadingCharge = unloadingCharge;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "sourceId:" + sourceId +
-                ", destinationId:" + destinationId +
-                ", truckTypeId:" + truckTypeId +
-                ", loadingPointId:" + loadingPointId +
-                ", unloadingPointId:" + unloadingPointId +
-                ", requiredBy:'" + requiredBy + '\'' +
-                ", transporterId:" + transporterId +
-                ", driver:'" + driver + '\'' +
-                ", truckNo:'" + truckNo + '\'' +
-                ", price:" + price +
-                ", loadingCharge:" + loadingCharge +
-                ", unloadingCharge:" + unloadingCharge +
-                '}';
     }
 }

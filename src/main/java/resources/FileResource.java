@@ -16,6 +16,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojos.OrderPojo;
+import scala.util.parsing.combinator.testing.Str;
 import utils.DataUtils;
 
 import javax.ws.rs.*;
@@ -84,67 +85,110 @@ public class FileResource
             int i = 0;
             for (Row currentRow : datatypeSheet)
             {
+
+                for (Cell currentCell : currentRow)
+                {
+                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
+                        System.out.print(currentCell.getStringCellValue() + "--");
+                    } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
+                        System.out.print(currentCell.getNumericCellValue() + "--");
+                    }
+                }
+
                 if(i > 0)
                 {
-                    int j = 0;
                     OrderPojo orderPojo = new OrderPojo();
-                    for (Cell currentCell : currentRow)
+                    for(int j = 0; j<currentRow.getLastCellNum(); j++)
+                    //for (Cell currentCell : currentRow)
                     {
+                        Cell currentCell = currentRow.getCell(j, Row.MissingCellPolicy.RETURN_NULL_AND_BLANK);
 
                         if( j ==0)
                         {
-                            orderPojo.setSourceId(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setItemId((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 1)
                         {
-                            orderPojo.setDestinationId(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setTruckTypeId((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 2)
                         {
-                            orderPojo.setTruckTypeId(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setLoadingPointId((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 3)
                         {
-                            orderPojo.setLoadingPointId(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setUnloadingPointId((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 4)
                         {
-                            orderPojo.setUnloadingPointId(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.STRING)
+                            {
+                                orderPojo.setRequiredBy((currentCell.getStringCellValue()));
+                            }
                         }
                         else if(j == 5)
                         {
-                            orderPojo.setRequiredBy((currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setTransporterId((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 6)
                         {
-                            orderPojo.setTransporterId(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.STRING)
+                            {
+                                orderPojo.setDriver((currentCell.getStringCellValue()));
+                            }
                         }
                         else if(j == 7)
                         {
-                            orderPojo.setDriver((currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.STRING)
+                            {
+                                orderPojo.setTruckNo((currentCell.getStringCellValue()));
+                            }
                         }
                         else if(j == 8)
                         {
-                            orderPojo.setTruckNo((currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setPrice((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 9)
                         {
-                            orderPojo.setPrice(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setLoadingCharge((int) currentCell.getNumericCellValue());
+                            }
                         }
                         else if(j == 10)
                         {
-                            orderPojo.setLoadingCharge(DataUtils.getInt(currentCell.getStringCellValue()));
-                        }
-                        else if(j == 11)
-                        {
-                            orderPojo.setUnloadingCharge(DataUtils.getInt(currentCell.getStringCellValue()));
+                            if(currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC)
+                            {
+                                orderPojo.setUnloadingCharge((int) currentCell.getNumericCellValue());
+                            }
                         }
                         //getCellTypeEnum shown as deprecated for version 3.15
                         //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
-                        if (currentCell.getCellTypeEnum() == CellType.STRING) {
+                        if (currentCell != null && currentCell.getCellTypeEnum() == CellType.STRING) {
                             System.out.print(currentCell.getStringCellValue() + "--");
-                        } else if (currentCell.getCellTypeEnum() == CellType.STRING) {
+                        } else if (currentCell != null && currentCell.getCellTypeEnum() == CellType.NUMERIC) {
                             System.out.print(currentCell.getNumericCellValue() + "--");
+                        } else
+                        {
+                            System.out.print(null + "--");
                         }
 
                         j++;
@@ -176,12 +220,34 @@ public class FileResource
     {
         for(OrderPojo orderPojo : orderPojoList)
         {
-            String url = "";
+            String url = "http://graphql.fr8desk.com/graphql/";
+
+            sessionToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIyNDUsInVzZXJfaWQiOjIyNDUsImVtYWlsIjoic3VyZXNoaHVzdGxlQGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwczpcL1wvaW50ZXJuYWwuZnI4ZGVzay5jb21cL2FwaVwvdjJcL3VzZXJcL3Nlc3Npb24iLCJpYXQiOjE0OTMwMTc3MDYsImV4cCI6MTQ5MzA1MzcwNiwibmJmIjoxNDkzMDE3NzA2LCJqdGkiOiI4YmVkMzY0OWQ4NzlmMjEyODNjM2E0ZDc3MWRjODI4MSJ9.GpNM7imansZuKPPaybDnpjYB9dw71ajQhFhUqQ0uYaU";
 
             Map<String,String> mParams = new HashMap<String, String>();
-            mParams.put("X-Dreamfactory-Session", sessionToken);
+            mParams.put("Content-Type", "application/json");
+            mParams.put("X-DreamFactory-Session-Token", sessionToken);
+            mParams.put("x-dreamfactory-api-key", "e1c1734b3b0615595b18ba0b11d848ce250f77552cece647032b25f3874e3f08");
 
-            ApiResult apiResult = ApiFetcher.makeStringRequest(url, ApiRequestType.POST, orderPojo.toString(), mParams);
+            if(orderPojo.getTransporterId() != null && orderPojo.getTruckNo() != null)
+            {
+                orderPojo.setStatusTypeId(4);
+            }
+            else if(orderPojo.getTransporterId() != null)
+            {
+                orderPojo.setStatusTypeId(3);
+            }
+            else
+            {
+                orderPojo.setStatusTypeId(2);
+            }
+
+            //String dataToSend = "{\"query\":\"mutation {\n  createOrder(order: {itemId: "+orderPojo.getItemId()+", statusTypeId: "+orderPojo.getStatusTypeId()+", requiredBy: \""+DataUtils.getString(orderPojo.getRequiredBy())+"\", partnerId:"+orderPojo.getTransporterId()+", driver:\""+DataUtils.getString(orderPojo.getDriver())+"\",truck:\""+DataUtils.getString(orderPojo.getTruckNo())+"\", loadingLocationId: "+orderPojo.getLoadingPointId()+", unloadingLocationId: "+orderPojo.getUnloadingPointId()+", orderPrice: {unitPrice: "+orderPojo.getPrice()+", quantity: 1, loading: "+orderPojo.getLoadingPointId()+", unloading: "+orderPojo.getUnloadingPointId()+"}}) {\n    orderId\n  }\n}\n\",\"variables\":null}";
+            String dataToSend = "{\"query\":\"mutation {\\n  createOrder(order: {itemId: "+orderPojo.getItemId()+", statusTypeId: "+orderPojo.getStatusTypeId()+", requiredBy: \\\""+DataUtils.getString(orderPojo.getRequiredBy())+"\\\", partnerId:"+orderPojo.getTransporterId()+", driver:\\\""+orderPojo.getDriver()+"\\\",truck:\\\""+orderPojo.getTruckNo()+"\\\", loadingLocationId: "+orderPojo.getLoadingPointId()+", unloadingLocationId: "+orderPojo.getUnloadingPointId()+", orderPrice: {unitPrice: "+orderPojo.getPrice()+", quantity: 1, loading: "+orderPojo.getLoadingCharge()+", unloading: "+orderPojo.getUnloadingCharge()+"}}) {\\n    orderId\\n  }\\n}\",\"variables\":null}";
+
+            ConsoleLog.i(TAG, dataToSend);
+
+            ApiResult apiResult = ApiFetcher.makeStringRequest(url, ApiRequestType.POST, dataToSend, mParams);
 
             if(apiResult.isSuccess())
             {

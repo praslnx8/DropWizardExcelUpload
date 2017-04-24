@@ -21,4 +21,14 @@ public class DataUtils
 
         return i;
     }
+
+    public static String getString(String s)
+    {
+        if(s == null)
+        {
+            s = "";
+        }
+
+        return s;
+    }
 }
