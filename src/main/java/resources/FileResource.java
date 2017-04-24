@@ -222,7 +222,7 @@ public class FileResource
         {
             String url = "http://graphql.fr8desk.com/graphql/";
 
-            sessionToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIyNDUsInVzZXJfaWQiOjIyNDUsImVtYWlsIjoic3VyZXNoaHVzdGxlQGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwczpcL1wvaW50ZXJuYWwuZnI4ZGVzay5jb21cL2FwaVwvdjJcL3VzZXJcL3Nlc3Npb24iLCJpYXQiOjE0OTMwMTc3MDYsImV4cCI6MTQ5MzA1MzcwNiwibmJmIjoxNDkzMDE3NzA2LCJqdGkiOiI4YmVkMzY0OWQ4NzlmMjEyODNjM2E0ZDc3MWRjODI4MSJ9.GpNM7imansZuKPPaybDnpjYB9dw71ajQhFhUqQ0uYaU";
+            //sessionToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIyNDUsInVzZXJfaWQiOjIyNDUsImVtYWlsIjoic3VyZXNoaHVzdGxlQGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwczpcL1wvaW50ZXJuYWwuZnI4ZGVzay5jb21cL2FwaVwvdjJcL3VzZXJcL3Nlc3Npb24iLCJpYXQiOjE0OTMwMTc3MDYsImV4cCI6MTQ5MzA1MzcwNiwibmJmIjoxNDkzMDE3NzA2LCJqdGkiOiI4YmVkMzY0OWQ4NzlmMjEyODNjM2E0ZDc3MWRjODI4MSJ9.GpNM7imansZuKPPaybDnpjYB9dw71ajQhFhUqQ0uYaU";
 
             Map<String,String> mParams = new HashMap<String, String>();
             mParams.put("Content-Type", "application/json");
